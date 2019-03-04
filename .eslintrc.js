@@ -25,5 +25,7 @@ module.exports = {
         "max-len": 0,
         "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
         "jsx-a11y/no-onchange": 0,
+        "jsx-a11y/label-has-associated-control": 0,
+        "react/no-array-index-key": 0
     }
 };
