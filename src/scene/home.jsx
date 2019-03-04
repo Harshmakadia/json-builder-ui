@@ -1,7 +1,7 @@
 // Importing Modules, Components and functions
 import React, { Component } from 'react';
 import {
-  Container, Grid, Message, Divider, Form, List, Button, Icon, TextArea,
+  Container, Grid, Message, Divider, Form, Button, Icon, Item,
 } from 'semantic-ui-react';
 
 // Importing CSS files
@@ -27,18 +27,22 @@ class Home extends Component {
     this.updateOptions = this.updateOptions.bind(this);
     this.updateSubTitle = this.updateSubTitle.bind(this);
     this.addSubTitle = this.addSubTitle.bind(this);
+    this.addCard = this.addCard.bind(this);
+    this.loadCard = this.loadCard.bind(this);
   }
 
   componentDidMount() {
     // Initial Setup here
   }
 
+  // Update any card detials
   updateDetails(event) {
     const { cardDetails } = this.state;
     cardDetails[event.target.name] = event.target.value;
     this.setState({ cardDetails });
   }
 
+  // toogleButton for options
   toggleButton() {
     const { cardDetails } = this.state;
     const OptionObject = {
@@ -50,6 +54,7 @@ class Home extends Component {
     this.setState({ showOptionInfo: true, cardDetails });
   }
 
+  // Removing options from card view
   removeOption(index) {
     const { cardDetails } = this.state;
     const { options } = cardDetails;
@@ -57,6 +62,7 @@ class Home extends Component {
     this.setState({ cardDetails });
   }
 
+  // Update option in card view
   updateOptions(index, event) {
     const { cardDetails } = this.state;
     const { options } = cardDetails;
@@ -64,6 +70,7 @@ class Home extends Component {
     this.setState({ cardDetails });
   }
 
+  // Update subtitle in card view
   updateSubTitle(index, event) {
     const { cardDetails } = this.state;
     const { subtitle } = cardDetails;
@@ -71,6 +78,7 @@ class Home extends Component {
     this.setState({ cardDetails });
   }
 
+  // Add new subtitle in card view
   addSubTitle() {
     const { cardDetails } = this.state;
     const { subtitle } = cardDetails;
@@ -78,6 +86,7 @@ class Home extends Component {
     this.setState({ cardDetails });
   }
 
+  // Remove subtitle from card view
   removeSubTitle(index) {
     const { cardDetails } = this.state;
     const { subtitle } = cardDetails;
@@ -85,9 +94,30 @@ class Home extends Component {
     this.setState({ cardDetails });
   }
 
+  // Adding new card
+  addCard() {
+    const { cardDetails, allCards } = this.state;
+    allCards.push(cardDetails);
+    const newBlankCard = {
+      image: '',
+      title: '',
+      action: '',
+      options: [],
+      subtitle: [],
+    };
+    this.setState({ allCards, cardDetails: newBlankCard });
+  }
+
+  // Loading card in editor
+  loadCard(index) {
+    let { cardDetails } = this.state;
+    const { allCards } = this.state;
+    cardDetails = allCards[index];
+    this.setState({ cardDetails });
+  }
 
   render() {
-    const { cardDetails, showOptionInfo } = this.state;
+    const { cardDetails, showOptionInfo, allCards } = this.state;
     const { options, subtitle } = cardDetails;
 
     // Rendering Options
@@ -136,6 +166,13 @@ class Home extends Component {
       </Form.Group>
     ));
 
+    const cards = allCards.map((card, index) => (
+      <Item key={index} onClick={() => this.loadCard(index)}>
+        <Item.Image size="tiny" src={card.image} />
+        <Item.Content verticalAlign="middle">{card.title}</Item.Content>
+      </Item>
+    ));
+
     return (
       <Container fluid>
         <Message
@@ -145,8 +182,12 @@ class Home extends Component {
         <Divider />
         <Grid>
           <Grid.Row>
-            <Grid.Column width={2} />
-            <Grid.Column width={8}>
+            <Grid.Column width={3}>
+              <Item.Group divided>
+                {cards}
+              </Item.Group>
+            </Grid.Column>
+            <Grid.Column width={9}>
               <div className="form-preview">
                 <Form>
                   <Form.Field>
@@ -161,7 +202,7 @@ class Home extends Component {
 
                   <Form.Field>
                     <label>
-Subtitle
+                      Subtitle
                       <Icon name="add" onClick={() => this.addSubTitle()} />
                     </label>
                     {SubtitleItems}
@@ -184,11 +225,11 @@ Subtitle
 
                   )
                   }
-
+                  <Button fluid color="green" onClick={this.addCard}>Add Card</Button>
                 </Form>
               </div>
             </Grid.Column>
-            <Grid.Column width={6}>
+            <Grid.Column width={4}>
               <CardPreview cardDetails={cardDetails} />
             </Grid.Column>
           </Grid.Row>

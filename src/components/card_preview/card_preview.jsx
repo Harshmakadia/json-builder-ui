@@ -17,8 +17,8 @@ function CardPreview(props) {
     </div>
   ));
 
-  const subtitle = cardDetails.subtitle.map((subtitle, index) => (
-    <List.Item as="li" key={index}>{subtitle}</List.Item>
+  const subtitle = cardDetails.subtitle.map((sub, index) => (
+    <List.Item as="li" key={index}>{sub}</List.Item>
 
   ));
 
