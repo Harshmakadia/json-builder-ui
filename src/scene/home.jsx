@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {
   Container, Grid, Message, Divider, Form, Button, Icon, Item,
 } from 'semantic-ui-react';
+import copy from 'copy-to-clipboard';
 
 // Importing CSS files
 import './home.css';
@@ -29,10 +30,7 @@ class Home extends Component {
     this.addSubTitle = this.addSubTitle.bind(this);
     this.addCard = this.addCard.bind(this);
     this.loadCard = this.loadCard.bind(this);
-  }
-
-  componentDidMount() {
-    // Initial Setup here
+    this.getCopyText = this.getCopyText.bind(this);
   }
 
   // Update any card detials
@@ -110,15 +108,33 @@ class Home extends Component {
 
   // Loading card in editor
   loadCard(index) {
-    let { cardDetails } = this.state;
-    const { allCards } = this.state;
-    cardDetails = allCards[index];
-    this.setState({ cardDetails });
+    const allCards = this.state.allCards.slice(0);
+    const cardDetailsa = Object.assign({}, allCards[index]);
+    this.setState({ cardDetails: cardDetailsa });
   }
+
+  getCopyText() {
+    const { allCards } = this.state;
+    for (let i = 0; i < allCards.length; i++) {
+      let subTitleString = '';
+      if (allCards[i].subtitle.length > 0) {
+        allCards[i].subtitle.forEach((title) => {
+          subTitleString += `&#x25CF;${title}<br>`;
+        });
+        allCards[i].subtitle = subTitleString;
+      }
+    }
+    copy(JSON.stringify(allCards));
+    return allCards;
+  }
+
 
   render() {
     const { cardDetails, showOptionInfo, allCards } = this.state;
-    const { options, subtitle } = cardDetails;
+    const {
+      options, subtitle, title, action, image,
+    } = cardDetails;
+    
 
     // Rendering Options
     const OptionItems = options.map((option, index) => (
@@ -173,11 +189,18 @@ class Home extends Component {
       </Item>
     ));
 
+    const CopyMaker = (
+      <div>
+      Start filing in the details below to get the JSON format of the details entered
+        <Button onClick={() => this.getCopyText({ allCards })}>Copy to clipboard</Button>
+      </div>
+    );
+
     return (
       <Container fluid>
         <Message
           header="JSON Builder UI"
-          content="Start filing in the details below to get the JSON format of the details entered"
+          content={CopyMaker}
         />
         <Divider />
         <Grid>
@@ -192,12 +215,12 @@ class Home extends Component {
                 <Form>
                   <Form.Field>
                     <label htmlFor="image">Image URL</label>
-                    <input placeholder="url" name="image" onChange={this.updateDetails} />
+                    <input placeholder="url" name="image" value={image} onChange={this.updateDetails} />
                   </Form.Field>
 
                   <Form.Field>
                     <label>Title</label>
-                    <input placeholder="title" name="title" onChange={this.updateDetails} />
+                    <input placeholder="title" name="title" value={title} onChange={this.updateDetails} />
                   </Form.Field>
 
                   <Form.Field>
@@ -210,7 +233,7 @@ class Home extends Component {
 
                   <Form.Field>
                     <label>Action</label>
-                    <input placeholder="action" name="action" onChange={this.updateDetails} />
+                    <input placeholder="action" name="action" value={action} onChange={this.updateDetails} />
                   </Form.Field>
 
                   <Button onClick={this.toggleButton}>Add Options</Button>
