@@ -1,8 +1,8 @@
-# Note taking app using React Webpack
+# Auto Generate JSON based on the values filled in the form 
 
 ## Introduction
 
-Auto Generate JSON based on the values filled in the form 
+The app is build to copy the JSON based on the values filled in the form. All CRUD operations can be performed in the form.
 ## Installation
 
 * `git clone git@github.com:Harshmakadia/json-builder-ui.git`
