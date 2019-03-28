@@ -19,7 +19,7 @@ class Home extends Component {
         title: 'Title',
         action: 'http://www.wotnot.io',
         options: [],
-        subtitle: ['subtitle'],
+        subtitle: [''],
       },
       showOptionInfo: false,
     };
@@ -80,7 +80,7 @@ class Home extends Component {
   addSubTitle() {
     const { cardDetails } = this.state;
     const { subtitle } = cardDetails;
-    subtitle.push('New Subtitle');
+    subtitle.push('');
     this.setState({ cardDetails });
   }
 
