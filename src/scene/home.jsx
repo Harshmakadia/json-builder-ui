@@ -15,9 +15,9 @@ class Home extends Component {
     this.state = {
       allCards: [],
       cardDetails: {
-        image: 'https://user-images.githubusercontent.com/13532530/53729055-2fd6c200-3e9a-11e9-9a7f-0e68c7ca7595.png',
-        title: 'Title',
-        action: 'http://www.wotnot.io',
+        image: '',
+        title: '',
+        action: '',
         options: [],
         subtitle: [''],
       },
@@ -44,8 +44,8 @@ class Home extends Component {
   toggleButton() {
     const { cardDetails } = this.state;
     const OptionObject = {
-      text: 'Option N',
-      next_dialog: 'N',
+      text: '',
+      next_dialog: '',
     };
     const { options } = cardDetails;
     options.push(OptionObject);
