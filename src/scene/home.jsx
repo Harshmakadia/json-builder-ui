@@ -13,6 +13,7 @@ class Home extends Component {
   constructor() {
     super();
     this.state = {
+      mainCardTitle: '',
       allCards: [],
       cardDetails: {
         image: '',
@@ -31,6 +32,7 @@ class Home extends Component {
     this.addCard = this.addCard.bind(this);
     this.loadCard = this.loadCard.bind(this);
     this.getCopyText = this.getCopyText.bind(this);
+    this.updateCardTitle = this.updateCardTitle.bind(this);
   }
 
   // Update any card detials
@@ -114,23 +116,39 @@ class Home extends Component {
   }
 
   getCopyText() {
-    const { allCards } = this.state;
+    const { allCards, mainCardTitle } = this.state;
     for (let i = 0; i < allCards.length; i++) {
       let subTitleString = '';
       if (allCards[i].subtitle.length > 0) {
         allCards[i].subtitle.forEach((title) => {
-          subTitleString += `&#x25CF;${title}<br>`;
+          subTitleString += `&#x25CF; ${title}<br>`;
         });
         allCards[i].subtitle = subTitleString;
       }
+
+      for(let j=0; j < allCards[i].options.length; j++){
+        allCards[i].options[j].callback = { };
+        allCards[i].options[j].callback.user_message = `${allCards[i].title} - ${allCards[i].options[j].text} `
+      }
     }
-    copy(JSON.stringify(allCards));
-    return allCards;
+
+    //In order to keep the JSON format same as that of the service 
+    //Making some changes 
+    let masterCards = { };
+    masterCards.title = mainCardTitle;
+    masterCards.cards = [];
+    masterCards.cards.push(allCards);
+    copy(JSON.stringify(masterCards));
+    return masterCards;
   }
 
+  updateCardTitle(event){
+    const { mainCardTitle } = this.state;
+    this.setState({ mainCardTitle: event.target.value });
+  }
 
   render() {
-    const { cardDetails, showOptionInfo, allCards } = this.state;
+    const { cardDetails, showOptionInfo, allCards, mainCardTitle } = this.state;
     const {
       options, subtitle, title, action, image,
     } = cardDetails;
@@ -203,6 +221,7 @@ class Home extends Component {
           content={CopyMaker}
         />
         <Divider />
+
         <Grid>
           <Grid.Row>
             <Grid.Column width={3}>
@@ -211,6 +230,21 @@ class Home extends Component {
               </Item.Group>
             </Grid.Column>
             <Grid.Column width={9}>
+
+              <Grid>
+                <Grid.Row>
+                  <Grid.Column>
+                    <Form>
+                      <Form.Field>
+                          <label htmlFor="image">Card Title</label>
+                          <input placeholder="text" name="title-main" value={mainCardTitle} onChange={this.updateCardTitle} />
+                      </Form.Field>
+                    </Form>
+                  </Grid.Column>
+                </Grid.Row>
+               </Grid>
+
+               <Divider/>
               <div className="form-preview">
                 <Form>
                   <Form.Field>
