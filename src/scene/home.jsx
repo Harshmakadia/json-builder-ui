@@ -136,8 +136,8 @@ class Home extends Component {
     //Making some changes 
     let masterCards = { };
     masterCards.title = mainCardTitle;
-    masterCards.cards = [];
-    masterCards.cards.push(allCards);
+    masterCards.cards = allCards;
+    //masterCards.cards.push(allCards);
     copy(JSON.stringify(masterCards));
     return masterCards;
   }
