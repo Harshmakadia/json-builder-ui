@@ -1,4 +1,4 @@
-name: Test workflow
+name: Deploy Master
 
 on:
   push:
@@ -19,7 +19,8 @@ jobs:
           node-version: 12.x
 
       - name: Deploy to netlify
-        uses: netlify/actions/cli@master
-        env:
-            NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-            NETLIFY_SITE_ID: ${{ secrets.STAGING_NETLIFY_SITE_ID }}
+      - uses: actions/checkout@v1
+      - uses: jsmrcaga/action-netlify-deploy@master
+        with:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
