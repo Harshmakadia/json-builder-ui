@@ -1,26 +1,19 @@
-name: Deploy Master
+name: 'Netlify Deploy'
 
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: ['published']
 
 jobs:
-  test:
+  deploy:
+    name: 'Deploy'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v1
-        
-      - name: Use Node.js 12.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-
-      - name: Deploy to netlify
       - uses: actions/checkout@v1
       - uses: jsmrcaga/action-netlify-deploy@master
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_DEPLOY_MESSAGE: "Prod deploy v${{ github.ref }}"
+          NETLIFY_DEPLOY_TO_PROD: true
